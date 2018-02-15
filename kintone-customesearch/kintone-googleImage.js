@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    // 検索のKeyとか
+    // 検索のKeyとか(個人のやつに修正してください)
     const key = '{API key}';
     const cx = '{Custom ID}';
 
