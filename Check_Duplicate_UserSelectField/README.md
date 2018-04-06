@@ -4,4 +4,4 @@
 複数人にも対応しています。
 
 ## Update
-2018/04/06 first commit
+- 2018/04/06 first commit
