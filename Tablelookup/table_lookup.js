@@ -10,7 +10,7 @@
 
     // ルックアップクリアをしたらテーブルを空にする
     if (!targetRecordId) {
-      event.record.Table.value = [];
+      event.record['Table'].value = [];
       return event;
     }
 
@@ -19,10 +19,10 @@
       id: targetRecordId,
     };
     kintone.api(kintone.api.url('/k/v1/record', true), 'GET', body, function(resp) {
-      event.record.Table.value = resp.record.Table.value;
+      event.record['Table'].value = resp.record['Table'].value;
 
       // サブテーブルを編集不可にする場合
-      event.record.Table.value.forEach(function(obj) {
+      event.record['Table'].value.forEach(function(obj) {
         Object.keys(obj.value).forEach(function(params) {
           obj.value[params].disabled = true;
         });
