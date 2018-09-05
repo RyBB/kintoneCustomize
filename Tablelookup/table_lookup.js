@@ -6,11 +6,14 @@
   ];
   kintone.events.on(events, function(event) {
     const targetAppId = kintone.app.getLookupTargetAppId('Lookup');
-    const targetRecordId = event.record.Number.value;
+    const targetRecordId = event.record['Number'].value;
+
+    // ルックアップクリアをしたらテーブルを空にする
     if (!targetRecordId) {
       event.record.Table.value = [];
       return event;
     }
+
     const body = {
       app: targetAppId,
       id: targetRecordId,
@@ -24,9 +27,10 @@
           obj.value[params].disabled = true;
         });
       });
+
       kintone.app.record.set(event);
     }, function(err) {
-      window.alert('エラーが発生しました');
+      window.alert('REST APIでエラーが発生しました');
     });
   });
 })();
