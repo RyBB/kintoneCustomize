@@ -20,9 +20,9 @@
 
       // サブテーブルを編集不可にする場合
       event.record.Table.value.forEach(function(obj) {
-        for (let p in obj.value) {
-          obj.value[p].disabled = true;
-        }
+        Object.keys(obj.value).forEach(function(params) {
+          obj.value[params].disabled = true;
+        });
       });
       kintone.app.record.set(event);
     }, function(err) {
