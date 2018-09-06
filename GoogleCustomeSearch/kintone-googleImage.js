@@ -1,76 +1,57 @@
 (function() {
-    'use strict';
+  'use strict';
 
-    // 検索のKeyとか(個人のやつに修正してください)
-    const key = '{API key}';
-    const cx = '{Custom ID}';
+  // 検索のKeyとか(個人のやつに修正してください)
+  const key = '{API key}';
+  const cx = '{Custom ID}';
 
-    // GoogleAPIを叩いてImageURLを取得する処理
-    const getImage = keyword => {
-        return new kintone.Promise(function(resolve, reject) {
-            const url = 'https://www.googleapis.com/customsearch/v1?key=' + key
-            + '&cx=' + cx + '&searchType=image&q=' + keyword;
-            kintone.proxy(url, 'GET', {}, {}, function(body, status, headers) {
-                const res = JSON.parse(body);
+  // 検索キーワードに空白があったら置換
+  const changeSpace = function(text) {
+    let txt = text.replace(/　/g, '%20');
+    txt = text.replace(/ /g, '%20');
+    return txt;
+  };
 
-                // とりあえずlink内にあるURL取得
-                const imageurl = res.items[0].link;
-                resolve(imageurl);
-            });
-        });
-    };
+  // メインの処理
+  kintone.events.on(['app.record.create.submit', 'app.record.edit.submit'], function(event) {
+    const record = event.record;
+    const searchkeyword = record['検索キーワード'].value;
+    const keyword = changeSpace(searchkeyword);
+    const url = 'https://www.googleapis.com/customsearch/v1?key=' + key
+    + '&cx=' + cx + '&searchType=image&q=' + keyword;
 
-    // Titleフィールドに空白があった場合%20に変換する処理
-    const changeSpace = txt => {
-        let str = txt.replace(/　/g,'%20');
-        str = str.replace(/ /g,'%20');
-        return str;
-    };
-
-    // innterHTMLのエスケープ処理
-    const escape = txt => {
-      let str = txt.replace(/&/g, '&amp;');
-      str = str.replace(/</g, '&lt;');
-      str = str.replace(/>/g, '&gt;');
-      str = str.replace(/"/g, '&quot;');
-      str = str.replace(/'/g, '&#39;');
-      return str;
-    };
-
-    // kintoneのイベント処理
-    // レコード追加/編集のサブミットイベント処理
-    kintone.events.on(['app.record.create.submit','app.record.edit.submit'],function(event) {
-        return new kintone.Promise(function(resolve, reject) {
-            const record = event.record;
-            const searchkeyword = record['検索キーワード'].value;
-            const checkedtext = changeSpace(searchkeyword);
-            resolve(checkedtext);
-        }).then(getImage).then(function(url) {
-            event.record['URL'].value = url;
-            return event;
-        });
-    });
-
-    // レコード詳細/編集イベント処理
-    kintone.events.on(['app.record.detail.show','app.record.edit.show'], function(event) {
-        var url = event.record['URL'].value;
-
-        // 画像増殖を防ぐ
-        if (document.getElementById('my_space') !== null) {
-            return;
-        }
-        // スペースフィールドに画像URLをはめる
-        const mySpace = document.createElement('space');
-        mySpace.id = 'my_space';
-        mySpace.innerHTML = '<image src="' + escape(url) + '" width="150" height="auto">';
-        kintone.app.record.getSpaceElement('space').appendChild(mySpace);
+    // GoogleのカスタムサーチAPIを実行
+    return kintone.proxy(url, 'GET', {}, {})
+      .then(function(body) {
+        const res = JSON.parse(body[0]);
+        const imageurl = res.items[0].link;
+        return imageurl;
+      })
+      .then(function(ul) {
+        event.record['URL'].value = ul;
         return event;
-    });
+      });
+  });
 
-    // レコード追加/編集イベント処理
-    kintone.events.on(['app.record.create.show', 'app.record.edit.show'], function(event) {
-        event.record['URL'].disabled = true;
-        return event;
-    });
+  // URLフィールドを編集不可にする
+  kintone.events.on(['app.record.create.show', 'app.record.edit.show'], function(event) {
+    event.record['URL'].disabled = true;
+    return event;
+  });
+
+  // 詳細画面、編集画面で画像を表示する
+  kintone.events.on(['app.record.detail.show', 'app.record.edit.show'], function(event) {
+    const url = event.record['URL'].value;
+    if (document.getElementById('my_space')) {
+      return;
+    }
+
+    // スペースフィールド取得
+    const mySpace = document.createElement('space');
+    mySpace.id = 'my_space';
+    mySpace.innerHTML = '<image src="' + url + '"  height="250" width="auto">';
+
+    kintone.app.record.getSpaceElement('space').appendChild(mySpace);
+    return event;
+  });
 }());
-
