@@ -32,16 +32,15 @@
     // PromiseでRESTを叩く
     return kintone.api(kintone.api.url('/k/v1/records'), 'GET', param)
       .then(function(resp) {
-        if (!resp.record) {
-          return resp.records[0]['userselect'].value[0].name;
-        }
+        if (resp.records.length) {return resp.records[0]['userselect'].value[0].name; }
+        return true;
+      })
+      .then(function(res) {
+        if (res === true) {return event; }
+        event.record['userselect'].error = res + 'が重複しています！';
         return event;
       })
-      .then(function(resp) {
-        event.record['userselect'].error = resp + 'が重複しています！';
-        return event;
-      })
-      .catch(function(error) {
+      .catch(function(err) {
         // error
         event.error = '予期せぬエラーが発生しました！';
         return event;
