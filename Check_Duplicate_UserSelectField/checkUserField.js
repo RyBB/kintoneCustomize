@@ -1,10 +1,7 @@
 (function() {
   'use strict';
-  const events = [
-    'app.record.create.submit',
-    'app.record.edit.submit',
-  ];
-  kintone.events.on(events, function(event) {
+
+  kintone.events.on(['app.record.create.submit', 'app.record.edit.submit'], function(event) {
     const userField = event.record['userselect'].value;
     const recordId = kintone.app.record.getId();
     let query = '';
@@ -33,10 +30,10 @@
     return kintone.api(kintone.api.url('/k/v1/records'), 'GET', param)
       .then(function(resp) {
         if (resp.records.length) {return resp.records[0]['userselect'].value[0].name; }
-        return true;
+        return null;
       })
       .then(function(res) {
-        if (res === true) {return event; }
+        if (!res) {return event; }
         event.record['userselect'].error = res + 'が重複しています！';
         return event;
       })
