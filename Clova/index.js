@@ -1,4 +1,5 @@
-// requestモジュールを利用するので npm でインストールしてください
+// request-promiseモジュールを利用するので npm でインストールしてください
+// ex) npm i request request-promise
 const request = require('request-promise');
 
 // kintoneから該当するレコードの件数を返す処理
