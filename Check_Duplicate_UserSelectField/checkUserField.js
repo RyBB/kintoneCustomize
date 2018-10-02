@@ -7,37 +7,40 @@
     let query = '';
 
     // ユーザー選択フィールドが空のときは処理をやめる
-    if (!userField.length) {return; }
+    if (!userField.length) {
+      return;
+    }
 
     // レコード編集時 (=レコードがすでにある時) はクエリ文追加
-    if (recordId) {query = '$id != ' + recordId + ' and '; }
+    if (recordId) {
+      query = '$id != ' + recordId + ' and ';
+    }
 
     // ユーザー選択フィールド用クエリ(複数人対応)
     query += 'userselect in (';
 
-    for (let i = 0; i <= (userField.length - 2); i++) {
+    for (let i = 0; i <= (userField.length - 1); i++) {
       query += '"' + userField[i].code + '",';
     }
-    query += '"' + userField[(userField.length - 1)].code + '")';
+    // 最後のカンマを削除して閉じる
+    query = query.slice(0, -1);
+    query += ')';
 
-    // REST で送るパラメータ
     const param = {
       'app': kintone.app.getId(),
       'query': query,
     };
 
-    // PromiseでRESTを叩く
+    // PromiseでREST(GET)を実行
     return kintone.api(kintone.api.url('/k/v1/records'), 'GET', param)
       .then(function(resp) {
-        if (resp.records.length) {return resp.records[0]['userselect'].value[0].name; }
-        return null;
-      })
-      .then(function(res) {
-        if (!res) {return event; }
-        event.record['userselect'].error = res + 'が重複しています！';
+        if (resp.records.length) {
+          let errMessage = resp.records[0]['userselect'].value[0].name + 'が重複しています！';
+          event.record['userselect'].error = errMessage;
+        }
         return event;
       })
-      .catch(function(err) {
+      .catch(function() {
         // error
         event.error = '予期せぬエラーが発生しました！';
         return event;
