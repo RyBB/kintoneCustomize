@@ -17,14 +17,7 @@
     }
 
     // ユーザー選択フィールド用クエリ(複数人対応)
-    query += 'userselect in (';
-
-    for (let i = 0; i <= (userField.length - 1); i++) {
-      query += '"' + userField[i].code + '",';
-    }
-    // 最後のカンマを削除して閉じる
-    query = query.slice(0, -1);
-    query += ')';
+    query += 'userselect in ("' + userField.join('","') + '")';
 
     const param = {
       'app': kintone.app.getId(),
