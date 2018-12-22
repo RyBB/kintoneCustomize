@@ -1,6 +1,12 @@
 (() => {
   'use strict';
 
+  // kintoneのフィールドコードとか
+  const common = {
+    image: 'image',
+    music: 'music'
+  };
+
   const xhr = new XMLHttpRequest();
 
   // レコードを全件取得する処理
@@ -39,9 +45,9 @@
   const getImageMusicURL = DATA => {
     return new Promise(async resolve => {
       const index = DATA.$id.value;
-      const imageFileKey = DATA.image.value[0].fileKey;
+      const imageFileKey = DATA[common.image].value[0].fileKey;
       const imageURL = await filedownload(imageFileKey);
-      const musicFileKey = DATA.music.value[0].fileKey;
+      const musicFileKey = DATA[common.music].value[0].fileKey;
       const musicURL = await filedownload(musicFileKey);
       resolve({
         index: index,
