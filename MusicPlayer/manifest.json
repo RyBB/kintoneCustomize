@@ -1,0 +1,19 @@
+{
+  "app": "581",
+  "scope": "ALL",
+  "desktop": {
+    "js": [
+      "https://js.cybozu.com/vuejs/v2.5.17/vue.min.js",
+      "kin.js",
+      "app.js"
+    ],
+    "css": []
+  },
+  "mobile": {
+    "js": [
+      "https://js.cybozu.com/vuejs/v2.5.17/vue.min.js",
+      "kin.js",
+      "app.js"
+    ]
+  }
+}
