@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Page Title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class=bg>
+  <div class="main">
+    <div id="app">
+      <div class="wrapper">
+        <div>
+          <img id="img" :src="imglink">
+        </div>
+      </div>
+      <div>
+        <a><audio :src="musiclink" v-on:ended="nextMusic" autoplay controls></audio></a>
+      </div>
+    </div>
+    <ol id="list">
+      <li class="title" v-for="item in items" v-on:click="changeMusic(item)">
+        {{ item.title }}
+      </li>
+    </ol>
+  </div>
+</div>
+  <script src="https://js.cybozu.com/vuejs/v2.5.17/vue.min.js"></script>
+  <script src="https://js.cybozu.com/jquery/3.3.1/jquery.min.js"></script>
+  <script src="./script.js"></script>
+  <script src="./snowfall.jquery.js"></script>
+</body>
+</html>
