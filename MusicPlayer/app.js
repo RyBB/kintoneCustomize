@@ -7,9 +7,11 @@
     'mobile.app.record.index.show',
   ];
   kintone.events.on(events, async e => {
+    // カスタマイズビュー以外なら終了
     if (!e.viewId === 5740139) {
       return;
     }
+
     // kintoneのレコードを全件取得する
     const kinData = await mykintone.getRecords(e.appId);
     const records = kinData.records;
