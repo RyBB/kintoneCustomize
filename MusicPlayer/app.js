@@ -20,7 +20,7 @@
     const URL = await mykintone.getImageMusicURL(records[0]);
 
     // Vue.js
-    var app = new Vue({
+    const app = new Vue({
       el: '#app',
       data: {
         index: URL.index,
