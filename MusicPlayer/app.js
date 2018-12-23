@@ -4,7 +4,7 @@
 
   const events = [
     'app.record.index.show',
-    'mobile.app.record.index.show',
+    'mobile.app.record.index.show'
   ];
   kintone.events.on(events, async e => {
     // カスタマイズビュー以外なら終了
@@ -29,21 +29,21 @@
       },
       methods: {
         nextMusic: async function() {
-          let URL;
+          let newURL;
           const index = records.findIndex(obj => {
             return  obj.$id.value === this.index;
           });
           if (!records[index + 1]) {
-            URL = await mykintone.getImageMusicURL(records[0]);
-            app.index = URL.index;
-            app.imglink = URL.img;
-            app.musiclink = URL.music;
+            newURL = await mykintone.getImageMusicURL(records[0]);
+            app.index = newURL.index;
+            app.imglink = newURL.img;
+            app.musiclink = newURL.music;
             return;
           }
-          URL = await mykintone.getImageMusicURL(records[index + 1]);
-          app.index = URL.index;
-          app.imglink = URL.img;
-          app.musiclink = URL.music;
+          newURL = await mykintone.getImageMusicURL(records[index + 1]);
+          app.index = newURL.index;
+          app.imglink = newURL.img;
+          app.musiclink = newURL.music;
         }
       }
     });
@@ -54,11 +54,11 @@
         items: records
       },
       methods: {
-        changeMusic: async function (event) {
-          const URL = await mykintone.getImageMusicURL(event);
-          app.index = URL.index;
-          app.imglink = URL.img;
-          app.musiclink = URL.music;
+        changeMusic: async function(event) {
+          let newURL = await mykintone.getImageMusicURL(event);
+          app.index = newURL.index;
+          app.imglink = newURL.img;
+          app.musiclink = newURL.music;
         }
       }
     });

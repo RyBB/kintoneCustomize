@@ -34,7 +34,7 @@
         let file = url.createObjectURL(blob);
         resolve(file);
       };
-      xhr.onerror = function() {
+      xhr.onerror = () => {
         reject('Error:XHR');
       };
       xhr.send();
