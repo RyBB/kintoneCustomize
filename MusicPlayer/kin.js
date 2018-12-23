@@ -45,10 +45,24 @@
   const getImageMusicURL = DATA => {
     return new Promise(async resolve => {
       const index = DATA.$id.value;
-      const imageFileKey = DATA[common.image].value[0].fileKey;
-      const imageURL = await filedownload(imageFileKey);
-      const musicFileKey = DATA[common.music].value[0].fileKey;
-      const musicURL = await filedownload(musicFileKey);
+      let imageURL, musicURL;
+
+      // 画像ファイルの有無チェック
+      if (!DATA[common.image].value[0]) {
+        imageURL = null;
+      } else {
+        let imageFileKey = DATA[common.image].value[0].fileKey;
+        imageURL = await filedownload(imageFileKey);
+      }
+
+      // 音楽ファイルの有無チェック
+      if (!DATA[common.music].value[0]) {
+        musicURL = null;
+      } else {
+        let musicFileKey = DATA[common.music].value[0].fileKey;
+        musicURL = await filedownload(musicFileKey);
+      }
+
       resolve({
         index: index,
         img: imageURL,
