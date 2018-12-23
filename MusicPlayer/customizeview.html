@@ -1,0 +1,43 @@
+<style>
+  .main {
+    max-width: 500px;
+    margin: auto;
+    text-align:center;
+  }
+  .title {
+    margin: 1em;
+    cursor: pointer;
+    border-bottom:1px solid #555555;
+  }
+  #img {
+     height: 300px;
+     width: auto;
+  }
+  #list {
+    font-size: 1.5em;
+    margin: 0.5em;
+  }
+  audio {
+    width: 100%;
+  }
+  </style>
+  <body>
+  <div class=bg>
+    <div class="main">
+      <div id="app">
+        <div class="wrapper">
+          <div>
+            <img id="img" :src="imglink">
+          </div>
+        </div>
+        <div>
+          <a><audio :src="musiclink" v-on:ended="nextMusic" autoplay controls></audio></a>
+        </div>
+      </div>
+      <ol id="list">
+        <li class="title" v-for="item in items" v-on:click="changeMusic(item)">
+          {{ item.music.value[0].name }}
+        </li>
+      </ol>
+    </div>
+  </div>
