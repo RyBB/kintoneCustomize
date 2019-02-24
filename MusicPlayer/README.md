@@ -6,4 +6,4 @@ https://rybb.github.io/MusicPlayer/
 
 ## Qiita
 kintoneでミュージックプレイヤーを作ってみた<br/>
-[リンク]()
+[リンク](https://qiita.com/RyBB/items/3f348b4a453c2c325837)
