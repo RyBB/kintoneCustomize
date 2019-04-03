@@ -5,7 +5,6 @@ jQuery.noConflict();
   const kin = {
     url: 'https://{サブドメイン}.cybozu.com/k/v1/record.json',
     appID: '{アプリID}',
-    token: '{APIトークン ※追加権限}',
   };
 
   // Garoonのイベント
@@ -65,20 +64,21 @@ jQuery.noConflict();
         },
       };
 
-      // ajaxでkintoneへレコード登録
-      $.ajax({
-        url: kin.url,
-        type: 'POST',
-        headers: {
-          'X-Cybozu-API-Token': kin.token,
-          'Content-Type': 'application/json',
-        },
-        data: JSON.stringify(params),
-      }).done(resp => {
-        console.log(resp);
-      }).fail(err => {
-        console.log(err);
-        return false;
+      // CSRFトークンを取得してAjaxでPOST
+      garoon.connect.kintone.getRequestToken().then(token => {
+        $.ajax({
+          url: kin.url + '?__REQUEST_TOKEN__=' + token,
+          type: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          data: JSON.stringify(params),
+        }).done(resp => {
+          console.log(resp);
+        }).fail(err => {
+          console.log(err);
+          return false;
+        });
       });
     }, true);
   });
